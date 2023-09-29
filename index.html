@@ -101,7 +101,7 @@
       function agregarEmpleado() {
         const apellidos = document.getElementById("apellidos").value;
         const nombres = document.getElementById("nombres").value;
-        const departamento = document.getElementById("departamento").value;
+        const departamentoCode = document.getElementById("departamento").value;
         const municipioCode = document.getElementById("municipio").value;
         const fechaNacimiento =
           document.getElementById("fechaNacimiento").value;
@@ -110,7 +110,7 @@
         const id = empleados.length + 1;
 
         const municipio = municipioSelect.options[municipioSelect.selectedIndex].text;
-
+        const departamento = departamentoSelect.options[departamentoSelect.selectedIndex].text;
 
         const empleado = {
           id,
@@ -153,9 +153,7 @@
           (empleado) => empleado.id === idABuscar
         );
         if (empleadoEncontrado) {
-          alert(
-            `ID: ${empleadoEncontrado.id}\nApellidos: ${empleadoEncontrado.apellidos}\nNombres: ${empleadoEncontrado.nombres}\nDepartamento: ${empleadoEncontrado.departamento}\nMunicipio: ${empleadoEncontrado.municipio}\nFecha de Nacimiento: ${empleadoEncontrado.fechaNacimiento}\nSalario: ${empleadoEncontrado.salario}`
-          );
+          alert(`ID: ${empleadoEncontrado.id}\nApellidos: ${empleadoEncontrado.apellidos}\nNombres: ${empleadoEncontrado.nombres}\nDepartamento: ${empleadoEncontrado.departamento}\nMunicipio: ${empleadoEncontrado.municipio}\nFecha de Nacimiento: ${empleadoEncontrado.fechaNacimiento}\nSalario: ${empleadoEncontrado.salario}`);
         } else {
           alert("Empleado no encontrado");
         }
