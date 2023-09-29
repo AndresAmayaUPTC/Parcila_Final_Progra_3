@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <title>Parcial Final</title>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1 class="mb-4">Formulario de Empleados</h1>
+      <form id="employeeForm">
+        <div class="mb-3">
+          <label for="apellidos" class="form-label">Apellidos:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="apellidos"
+            pattern="[A-Za-z ]+"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="nombres" class="form-label">Nombres:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nombres"
+            pattern="[A-Za-z ]+"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="departamento" class="form-label">Departamento:</label>
+          <select class="form-select" id="departamento" required>
+            <option value="">Selecciona un departamento</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="municipio" class="form-label">Municipio:</label>
+          <select class="form-select" id="municipio" required>
+            <option value="">Selecciona un municipio</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="fechaNacimiento" class="form-label"
+            >Fecha de Nacimiento:</label
+          >
+          <input
+            type="date"
+            class="form-control"
+            id="fechaNacimiento"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="salario" class="form-label">Salario:</label>
+          <input type="number" class="form-control" id="salario" required />
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="agregarEmpleado()"
+        >
+          Agregar Empleado
+        </button>
+      </form>
+
+      <h2 class="mt-5">Tabla de Empleados</h2>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Apellidos y Nombres</th>
+            <th>Ciudad</th>
+            <th>Edad</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTableBody"></tbody>
+      </table>
+
+      <h2 class="mt-5">Búsqueda de Empleado por ID</h2>
+      <div class="mb-3">
+        <label for="buscarId" class="form-label">ID del Empleado:</label>
+        <input type="number" class="form-control" id="buscarId" />
+      </div>
+      <button type="button" class="btn btn-primary" onclick="buscarEmpleado()">
+        Buscar
+      </button>
+    </div>
+
+    <script>
+      const empleados = [];
+
+      function agregarEmpleado() {
+        const apellidos = document.getElementById("apellidos").value;
+        const nombres = document.getElementById("nombres").value;
+        const departamento = document.getElementById("departamento").value;
+        const municipio = document.getElementById("municipio").value;
+        const fechaNacimiento =
+          document.getElementById("fechaNacimiento").value;
+        const salario = document.getElementById("salario").value;
+
+        const id = empleados.length + 1;
+
+        const empleado = {
+          id,
+          apellidos,
+          nombres,
+          departamento,
+          municipio,
+          fechaNacimiento,
+          salario,
+        };
+
+        empleados.push(empleado);
+
+        const table = document.getElementById("employeeTableBody");
+        const newRow = table.insertRow();
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2);
+        const cell4 = newRow.insertCell(3);
+        cell1.textContent = id;
+        cell2.textContent = `${apellidos}, ${nombres}`;
+        cell3.textContent = municipio;
+
+        const fechaNacimientoDate = new Date(fechaNacimiento);
+        const hoy = new Date();
+        const edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
+        cell4.textContent = edad;
+
+        document.getElementById("apellidos").value = "";
+        document.getElementById("nombres").value = "";
+        document.getElementById("departamento").value = "";
+        document.getElementById("municipio").value = "";
+        document.getElementById("fechaNacimiento").value = "";
+        document.getElementById("salario").value = "";
+      }
+
+      function buscarEmpleado() {
+        const idABuscar = parseInt(document.getElementById("buscarId").value);
+        const empleadoEncontrado = empleados.find(
+          (empleado) => empleado.id === idABuscar
+        );
+        if (empleadoEncontrado) {
+          alert(
+            `ID: ${empleadoEncontrado.id}\nApellidos: ${empleadoEncontrado.apellidos}\nNombres: ${empleadoEncontrado.nombres}\nDepartamento: ${empleadoEncontrado.departamento}\nMunicipio: ${empleadoEncontrado.municipio}\nFecha de Nacimiento: ${empleadoEncontrado.fechaNacimiento}\nSalario: ${empleadoEncontrado.salario}`
+          );
+        } else {
+          alert("Empleado no encontrado");
+        }
+      }
+    </script>
+    <script>
+      const departamentoSelect = document.getElementById("departamento");
+
+      const jsonURL = "Data/departments.json";
+
+      fetch(jsonURL)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((departamento) => {
+            const option = document.createElement("option");
+            option.value = departamento.code;
+            option.textContent = departamento.name;
+            departamentoSelect.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error("Error al cargar los departamentos:", error);
+        });
+
+      const departamentoSelect2 = document.getElementById("departamento");
+
+      const municipioSelect = document.getElementById("municipio");
+
+      const jsonURL2 = "Data/towns.json";
+
+      fetch("Data/departments.json")
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((departamento) => {
+            const option = document.createElement("option");
+            option.value = departamento.code;
+            option.textContent = departamento.name;
+            departamentoSelect2.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error("Error al cargar los departamentos:", error);
+        });
+
+      departamentoSelect2.addEventListener("change", () => {
+        municipioSelect.innerHTML =
+          '<option value="">Selecciona un municipio</option>';
+
+        const selectedDepartamentoCode = departamentoSelect2.value;
+
+        fetch(jsonURL2)
+          .then((response) => response.json())
+          .then((data) => {
+            const municipiosFiltrados = data.filter(
+              (municipio) => municipio.department === selectedDepartamentoCode
+            );
+
+            municipiosFiltrados.forEach((municipio) => {
+              const option = document.createElement("option");
+              option.value = municipio.code;
+              option.textContent = municipio.name;
+              municipioSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error al cargar los municipios:", error);
+          });
+      });
+    </script>
+  </body>
+</html>
