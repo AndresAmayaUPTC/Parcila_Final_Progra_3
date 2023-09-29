@@ -102,12 +102,15 @@
         const apellidos = document.getElementById("apellidos").value;
         const nombres = document.getElementById("nombres").value;
         const departamento = document.getElementById("departamento").value;
-        const municipio = document.getElementById("municipio").value;
+        const municipioCode = document.getElementById("municipio").value;
         const fechaNacimiento =
           document.getElementById("fechaNacimiento").value;
         const salario = document.getElementById("salario").value;
 
         const id = empleados.length + 1;
+
+        const municipio = municipioSelect.options[municipioSelect.selectedIndex].text;
+
 
         const empleado = {
           id,
